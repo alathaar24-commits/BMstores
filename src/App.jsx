@@ -126,6 +126,29 @@ const mapSettingsToDB = (s) => ({
   currency: s.currency
 });
 
+// --- NEW: ORDER MAPPER TO FIX DEPLOYMENT CRASH ---
+const mapOrderFromDB = (o) => {
+  let parsedItems = [];
+  
+  if (o.items) {
+    if (Array.isArray(o.items)) {
+      parsedItems = o.items;
+    } else if (typeof o.items === 'string') {
+      try {
+        parsedItems = JSON.parse(o.items);
+      } catch (e) {
+        console.warn("Failed to parse order items:", e);
+        parsedItems = [];
+      }
+    }
+  }
+
+  return {
+    ...o,
+    items: Array.isArray(parsedItems) ? parsedItems : [] // Pastikan selalu array
+  };
+};
+
 /**
  * ==========================================
  * 1. INITIAL STATE (FALLBACK)
@@ -1534,7 +1557,8 @@ export default function App() {
 
         // 3. Fetch Orders (Kalau Admin) - Simulasi fetch all untuk demo
         const { data: ordersData } = await supabase.from('orders').select('*').order('created_at', { ascending: false });
-        if (ordersData) setOrders(ordersData);
+        // --- FIX: Apply MapOrderFromDB here to prevent .map() crash on raw items string ---
+        if (ordersData) setOrders(ordersData.map(mapOrderFromDB));
         
       } catch (error) {
         console.error("Critical Error fetching data:", error);
