@@ -1,0 +1,62 @@
+@tailwind base;
+    @tailwind components;
+    @tailwind utilities;
+    
+    body {
+      /* Opsional: Style tambahan */
+      background-color: #f8f7f5; 
+    }
+    /* Tambahkan di akhir file */
+.swipe-back-enabled {
+  overscroll-behavior-x: contain;
+}
+
+/* Sticky header improvements */
+.sticky {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+}
+
+/* Better scroll for tables */
+.table-scroll {
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Modal backdrop */
+.modal-backdrop {
+  backdrop-filter: blur(4px);
+}
+
+/* Copy button animation */
+.copy-success {
+  animation: copyPulse 0.5s ease-in-out;
+}
+
+@keyframes copyPulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+  100% { transform: scale(1); }
+}
+
+/* Variant price highlight */
+.variant-price-change {
+  transition: all 0.2s ease;
+}
+
+.variant-price-change.positive {
+  color: #10b981;
+}
+
+.variant-price-change.negative {
+  color: #ef4444;
+}
+
+/* Address form validation */
+input:invalid, textarea:invalid {
+  border-color: #ef4444 !important;
+}
+
+input:valid, textarea:valid {
+  border-color: #10b981 !important;
+}
